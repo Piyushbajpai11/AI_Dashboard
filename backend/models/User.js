@@ -1,23 +1,23 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
-}, {
-    timestamps: true,
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true }, // assuming you have this already
+
+    bio: { type: String, default: '' },
+    profileImageUrl: { type: String, default: '' },
+
+    contentStats: {
+        totalGenerated: { type: Number, default: 0 },
+        lastUsedType: { type: String, default: '' },
+        mostUsedTone: { type: String, default: '' },
+        toneCounts: {
+            type: Map,
+            of: Number,
+            default: {}
+        }
+    }
 });
 
 

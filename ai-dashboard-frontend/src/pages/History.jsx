@@ -11,6 +11,7 @@ const History = () => {
     const [filterType, setFilterType] = useState('all');
     const [copiedId, setCopiedId] = useState(null);
     const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+    const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
 
     useEffect(() => {
         fetchHistory();
@@ -39,6 +40,37 @@ const History = () => {
             setTimeout(() => setCopiedId(null), 2000);
         } catch (err) {
             console.error('Failed to copy:', err);
+        }
+    };
+
+
+    const handleDeleteAll = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                setError('Authentication token not found. Please login again.');
+                return;
+            }
+
+            const response = await axios.delete('http://localhost:5000/api/content/delete/all', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (response.status === 200) {
+                setHistory([]);
+                setShowDeleteAllConfirm(false);
+            }
+        } catch (err) {
+            console.error('Delete all error:', err);
+            if (err.response) {
+                setError(err.response.data.message || 'Failed to delete all content');
+            } else if (err.request) {
+                setError('No response from server. Please check your connection.');
+            } else {
+                setError('Error setting up the request');
+            }
         }
     };
 
@@ -75,6 +107,7 @@ const History = () => {
             }
         }
     };
+
 
     const filteredHistory = history
         .filter(item => {
@@ -134,6 +167,29 @@ const History = () => {
                                 <option value="tweet">Tweets</option>
                                 <option value="linkedin">LinkedIn Posts</option>
                             </select>
+                            {showDeleteAllConfirm ? (
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={handleDeleteAll}
+                                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                    >
+                                        Confirm Delete All
+                                    </button>
+                                    <button
+                                        onClick={() => setShowDeleteAllConfirm(false)}
+                                        className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => setShowDeleteAllConfirm(true)}
+                                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                >
+                                    Delete All
+                                </button>
+                            )}
                         </div>
                     </div>
 

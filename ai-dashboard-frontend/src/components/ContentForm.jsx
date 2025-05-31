@@ -1,7 +1,6 @@
-// src/components/ContentForm.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
-import ReactQuill from 'react-quill';
+// import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { FaArrowUp, FaCopy, FaCheck } from 'react-icons/fa';
 
@@ -127,7 +126,6 @@ const ContentForm = () => {
 
     return (
         <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
-            {/* Content Type Selector */}
             <div className="relative flex bg-white shadow-[0_0_1px_rgba(24,94,224,0.15),0_6px_12px_rgba(24,94,224,0.15)] px-3 py-2 rounded-full w-fit">
                 <span
                     className={`absolute top-2 left-2 h-[30px] w-[100px] rounded-full bg-[#e6eef9] transition-transform duration-300 ease-out z-0 ${formData.type === "tweet"
@@ -177,7 +175,6 @@ const ContentForm = () => {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-6">
-                    {/* Tone Selector */}
                     <div className="relative flex bg-white shadow-[0_0_1px_rgba(24,94,224,0.15),0_6px_12px_rgba(24,94,224,0.15)] px-3 py-2 rounded-full w-fit">
                         <span
                             className={`absolute top-2 left-2 h-[30px] w-[100px] rounded-full bg-[#e6eef9] transition-transform duration-300 ease-out z-0 ${formData.tone === "witty"
@@ -208,7 +205,7 @@ const ContentForm = () => {
                         ))}
                     </div>
 
-                    {/* Length Selector */}
+                
                     <div className="relative flex bg-white shadow-[0_0_1px_rgba(24,94,224,0.15),0_6px_12px_rgba(24,94,224,0.15)] px-3 py-2 rounded-full w-fit">
                         <span
                             className={`absolute top-2 left-2 h-[30px] w-[80px] rounded-full bg-[#e6eef9] transition-transform duration-300 ease-out z-0 ${formData.length === "medium"
@@ -239,7 +236,7 @@ const ContentForm = () => {
                         ))}
                     </div>
 
-                    {/* Submit Button */}
+                    
                     <div className="relative flex-1 min-w-[30px] max-w-[40px] aspect-square">
                         <button
                             type="submit"
@@ -262,7 +259,6 @@ const ContentForm = () => {
                     </div>
                 </div>
 
-                {/* Format Options - Only show for tweet and linkedin */}
                 {formData.type === 'tweet' && (
                     <div className="w-full mt-4 p-4 bg-gray-50 rounded-lg">
                         <h3 className="text-sm font-medium mb-3">Tweet Format Options</h3>

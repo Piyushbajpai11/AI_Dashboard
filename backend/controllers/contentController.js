@@ -1,5 +1,5 @@
 import Content from "../models/Content.js";
-// Placeholder: Replace with actual Grok API integration
+import User from "../models/User.js";
 import generateContentFromGrok from "../utils/grokHelper.js";
 
 export const createContent = async (req, res) => {
@@ -16,6 +16,26 @@ export const createContent = async (req, res) => {
             length,
             content: generated
         });
+
+        const user = await User.findById(req.user.id);
+        user.contentStats.totalGenerated += 1;
+        user.contentStats.lastUsedType = type;
+
+        const toneCounts = user.contentStats.toneCounts || new Map();
+        toneCounts.set(tone, (toneCounts.get(tone) || 0) + 1);
+        user.contentStats.toneCounts = toneCounts;
+
+        let maxCount = 0;
+        let mostUsedTone = '';
+        toneCounts.forEach((count, tone) => {
+            if (count > maxCount) {
+                maxCount = count;
+                mostUsedTone = tone;
+            }
+        });
+        user.contentStats.mostUsedTone = mostUsedTone;
+
+        await user.save();
 
         res.status(201).json(newContent);
     } catch (error) {
@@ -50,6 +70,17 @@ export const deleteContent = async (req, res) => {
     }
 };
 
-// export default { createContent, getAllContent };
+export const deleteAllContent = async (req, res) => {
+    try {
+        const result = await Content.deleteMany({ user: req.user.id });
 
-// module.exports = { createContent, getAllContent };
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: "No content found to delete." });
+        }
+
+        res.status(200).json({ message: `${result.deletedCount} content item(s) deleted successfully.` });
+    } catch (error) {
+        console.error("Error deleting all content:", error.message);
+        res.status(500).json({ message: "Failed to delete all content." });
+    }
+};

@@ -1,11 +1,12 @@
-import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaUser } from 'react-icons/fa';
 
 const Navbar = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        // Add your logout logic here (e.g., clearing tokens, etc.)
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');        
         navigate('/');
     };
 
@@ -25,6 +26,13 @@ const Navbar = () => {
                             className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                         >
                             History
+                        </Link>
+                        <Link
+                            to="/dashboard/profile"
+                            className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium flex items-center gap-2"
+                        >
+                            <FaUser className="text-lg" />
+                            <span>Profile</span>
                         </Link>
                         <button
                             onClick={handleLogout}

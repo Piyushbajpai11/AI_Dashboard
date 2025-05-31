@@ -1,4 +1,3 @@
-// src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -9,6 +8,7 @@ import Register from "./pages/Register";
 import ContentForm from "./components/ContentForm";
 import History from "./pages/History";
 import Navbar from "./components/Navbar";
+import ProfileCard from "./pages/ProfileCard";
 
 // Layout component for protected routes
 const ProtectedLayout = ({ children }) => {
@@ -40,6 +40,14 @@ const App = () => {
           element={
             <ProtectedLayout>
               <History />
+            </ProtectedLayout>
+          }
+        />
+        <Route
+          path="/dashboard/profile"
+          element={
+            <ProtectedLayout>
+              <ProfileCard />
             </ProtectedLayout>
           }
         />
